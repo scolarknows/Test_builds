@@ -1,21 +1,47 @@
-h1 {
+body {
   text-align: center;
-  font-size: 5rem;
+  font-size: 4rem;
   font-family: 'Lucida Sans', sans-serif;
 }
+
 
 section {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 input[type="text"] {
   font-size: 2.5rem;
   color: blue;
   margin-right: 5px;
+  border: 2px solid gray;
+  border-radius: 5px;
 }
 
 button {
   font-size: 1.5rem;
   padding: 10px 20px;
+  margin: 5px;
+
+  border-radius: 5px;
+  border: none;
+  background-color: blue;
+  color: white;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 5px;
+  border: 2px solid rgba(128, 128, 128, 0.452);
+  border-radius: 5px;
+}
+
+.todo-item p {
+  font-size: 2.1rem;
+  flex: 1;
+  text-align: center;
+  margin: 0;
 }

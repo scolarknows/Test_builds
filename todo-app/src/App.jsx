@@ -1,32 +1,49 @@
 import { useState } from "react"
-function handleAdd() {
 
-}
-
-function handleDelete() {
-
-}
-
-function toggleTask() {
-
-}
 
 function App() {
+  const [inputValue, setInputValue] = useState("");
+  const [task, setTask] = useState([]);
 
-  const [task, setTask] = useState("");
+
+  function handleAdd() {
+    const trimmedTask = inputValue.trim();
+
+    if (!trimmedTask) return;
+
+    setTask([...task, trimmedTask]);
+    setInputValue("");
+  }
+
+  function handleDelete() {
+
+  }
+
+  function toggleTask() {
+
+  }
 
   return (
     <>
       <h1>TO-DO App</h1>
-      <section>
-        <input type="text" placeholder="Enter a Task ..." />
-        <button>Add</button>
+      <section className="header">
+        <input
+          type="text"
+          placeholder="Enter a Task ..."
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <button onClick={handleAdd}>Add</button>
       </section>
-      <section>
-        <p>dynamic object</p>
-        <button>Delete</button>
-        <button>Toggle</button>
-      </section>
+      <div>
+        {task.map((task, index) => (
+          <div className="todo-item" key={index}>
+            <p>{task}</p>
+            <button>Delete</button>
+            <button>Toggle</button>
+          </div>
+        ))}
+      </div>
     </>
   )
 }
