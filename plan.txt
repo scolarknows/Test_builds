@@ -1,0 +1,14 @@
+Build a Todo App with:
+
+features: 
+-Add task
+-Delete task
+-Mark complete
+
+-state lives inside App.jsx
+-try to create efficient and reusable components
+-simple ui design:
+1. task input area
+2. *add button* to add tasks
+3. *Delete button* to delete tasks
+4. *toggle button* to mark or unmark tasks
