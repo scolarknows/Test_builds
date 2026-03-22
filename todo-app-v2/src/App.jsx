@@ -1,17 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import ToDoItem from './components/ToDoItem';
 
 function App() {
   const [inputValue, setInputValue] = useState("");
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
+  const isInputEmpty = inputValue.trim() === "";
 
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   function addTask() {
-
     const newTask = {
       id: Date.now(),
       text: inputValue,
       completed: false
     }
+
     setTasks(prev => [...prev, newTask]);
     setInputValue("");
   }
@@ -35,16 +43,29 @@ function App() {
     <div className='app-container'>
       <div className='top-row'>
         <h1>TO-DO List</h1>
-        <input type='text' placeholder='Enter a Task ...' value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
-        <button onClick={addTask}>Add</button>
+        <input
+          type='text'
+          placeholder='Enter a Task ...'
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+
+        <button
+          onClick={addTask}
+          disabled={isInputEmpty}
+        >
+          Add
+        </button>
       </div>
+
       <div>
         {tasks.map((task) => (
-          <div key={task.id} className='todo-item'>
-            <p style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>{task.text}</p>
-            <button onClick={() => deleteTask(task.id)}>Delete</button>
-            <button onClick={() => toggleTask(task.id)}>Toggle</button>
-          </div>
+          <ToDoItem
+            key={task.id}
+            task={task}
+            onDelete={deleteTask}
+            onToggle={toggleTask}
+          />
         ))}
       </div>
     </div>
