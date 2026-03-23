@@ -6,7 +6,9 @@ features:
 -Mark complete
 
 -state lives inside App.jsx
--try to create efficient and reusable components
+-try to create efficient and reusable components: 
+ -created a ToDoItem component for handling item separatelyin a child component incresing the redability of the parent component  
+ 
 -simple ui design:
 1. task input area
 2. *add button* to add tasks
