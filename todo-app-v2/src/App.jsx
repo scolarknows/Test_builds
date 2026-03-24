@@ -60,8 +60,6 @@ function App() {
     setEditText("");
   }
 
-
-
   return (
     <div className='app-container'>
       <h1>TO-DO List</h1>
