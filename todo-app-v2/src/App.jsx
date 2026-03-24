@@ -7,11 +7,18 @@ function App() {
     const savedTasks = localStorage.getItem("tasks");
     return savedTasks ? JSON.parse(savedTasks) : [];
   });
+  const [editId, setEditId] = useState(null);
+  const [editText, setEditText] = useState("");
   const isInputEmpty = inputValue.trim() === "";
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
+
+  function editTask(task) {
+    setEditId(task.id);
+    setEditText(task.text);
+  }
 
   function addTask() {
     const newTask = {
@@ -36,13 +43,29 @@ function App() {
           : task
       )
     )
-
   }
+
+  function saveEditTask(id) {
+    const trimmedTask = editText.trim();
+    if (trimmedTask === "") return;
+
+    setTasks(prev =>
+      prev.map(task =>
+        task.id === id
+          ? { ...task, text: trimmedTask }
+          : task
+      )
+    );
+    setEditId(null);
+    setEditText("");
+  }
+
+
 
   return (
     <div className='app-container'>
+      <h1>TO-DO List</h1>
       <div className='top-row'>
-        <h1>TO-DO List</h1>
         <input
           type='text'
           placeholder='Enter a Task ...'
@@ -65,6 +88,11 @@ function App() {
             task={task}
             onDelete={deleteTask}
             onToggle={toggleTask}
+            onEdit={editTask}
+            editId={editId}
+            editText={editText}
+            onSaveEdit={saveEditTask}
+            setEditText={setEditText}
           />
         ))}
       </div>
