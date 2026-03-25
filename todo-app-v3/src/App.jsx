@@ -1,11 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ToDoItem from "./components/ToDoItem";
 
 function App() {
     const [inputValue, setInputValue] = useState("");
-    const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState(() => {
+        const savedTasks = localStorage.getItem("tasks");
+        return savedTasks ? JSON.parse(savedTasks) : []
+    });
+    const [editText, setEditText] = useState("");
+    const [editId, setEditId] = useState(null);
 
-    const trimmedInput = inputValue.trim();
+    const isInputValueEmpty = inputValue.trim() === "";
+
+    useEffect(() => {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    }, [tasks])
 
     function addTask() {
         const newTask = {
@@ -14,8 +23,6 @@ function App() {
             completed: false
 
         }
-        if (trimmedInput === "") return;
-
         setTasks(prev => [...prev, newTask]);
         setInputValue("");
     }
@@ -32,13 +39,36 @@ function App() {
         )
     }
 
+    function editTask(task) {
+        setEditId(task.id);
+        setEditText(task.text);
+    }
+
+    function saveEditTask(id) {
+        const trimmedTask = editText.trim();
+        if (trimmedTask === "") return;
+
+        setTasks(prev =>
+            prev.map(task =>
+                task.id === id
+                    ? { ...task, text: trimmedTask }
+                    : task
+            )
+        )
+        setEditId(null);
+        setEditText("");
+    }
 
     return (
         <div className="app-container">
             <h1>ToDo-List</h1>
             <div className="top-row">
                 <input type="text" placeholder="Enter a Task ... " value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
-                <button onClick={addTask}>Add</button>
+                <button onClick={addTask}
+                    disabled={isInputValueEmpty}
+                >
+                    Add
+                </button>
             </div>
             <div>
                 {tasks.map((task) => (
@@ -46,7 +76,12 @@ function App() {
                         key={task.id}
                         task={task}
                         onDelete={deleteTask}
-                        onToggle={toggleTask} />
+                        onToggle={toggleTask}
+                        onEdit={editTask}
+                        onSaveEdit={saveEditTask}
+                        editId={editId}
+                        editText={editText}
+                        setEditText={setEditText} />
                 ))}
             </div>
         </div>
